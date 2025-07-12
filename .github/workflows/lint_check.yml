@@ -15,11 +15,5 @@ jobs:
       - name: Install flake8
         run: pip3 install flake8
 
-      - name: Show current path.
-        run: pwd
-
-      - name: Show other directiry.
-        run: tree ../
-
-      # - name: Checking
-      #   run: flake8 gen_weekly_todo.py
+      - name: Checking
+        run: flake8 gen_weekly_todo.py
