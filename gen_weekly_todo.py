@@ -9,17 +9,12 @@ TODO_FILE = 'todo.md'
 
 def get_year_week_number():
     today = datetime.now()
-    year = today.strftime("%Y")
-    month = today.strftime("%m")
-    week = today.isocalendar()[1]
 
-    year_week_num = []
-    year_week_num.append({
-        "year": year,
-        "month": month,
-        "week": week
-    })
-    return year_week_num
+    return {
+        "year": today.strftime("%Y"),
+        "month": today.strftime("%m"),
+        "week": today.isocalendar()[1]
+    }
 
 
 def get_weekly_dates():
@@ -61,15 +56,11 @@ def main():
 
     # H1.
     #
-    year_num = ""
-    month_num = ""
-    week_num = ""
+    ywn = get_year_week_number()
+    year_num = ywn["year"]
+    month_num = ywn["month"]
+    week_num = ywn["week"]
 
-    year_week_num = get_year_week_number()
-    for ywn in year_week_num:
-        year_num = ywn["year"]
-        month_num = ywn["month"]
-        week_num = ywn["week"]
     md_content = f"# Weekly of {year_num}.{week_num}\n"
 
     # Calendar block.
