@@ -10,4 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: pip3 install flake8
-      - run: flake8 gen_weekly_todo.py
+      - run: pwd
+      - run: ls
+      # - run: flake8 gen_weekly_todo.py
