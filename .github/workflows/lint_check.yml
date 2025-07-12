@@ -1,13 +1,13 @@
 name: Lint check
-run-name: flake8
+run-name: Lint check
 
 on:
   push:
-    branchs: "*"
   workflow_dispatch:
 
 jobs:
-  demo:
+  flake8:
     runs-on: ubuntu-latest
     steps:
+      - run: pip3 install flake8
       - run: flake8 gen_weekly_todo.py
