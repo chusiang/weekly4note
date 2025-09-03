@@ -26,6 +26,11 @@ Usage:
         type=int,
         default="0"
     )
+    parser.add_argument(
+        "-n", "--next-week",
+        help="Next week",
+        action="store_true"
+    )
     return parser.parse_args()
 
 
@@ -78,7 +83,13 @@ def view_weekly_todo(weekly_dates, md_content):
 
 def main():
     args = get_args()
+
+    # -d, --days
     daydelta = args.days
+
+    # -n, --next-week
+    if args.next_week:
+        daydelta = 7
 
     try:
         # H1.
