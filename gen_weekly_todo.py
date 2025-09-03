@@ -1,31 +1,50 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import calendar
+from argparse import ArgumentParser
+from argparse import RawTextHelpFormatter
 from datetime import datetime, timedelta
+import calendar
+
 
 TODO_FILE = 'todo.md'
 
 
-def get_year_week_number():
+def get_args():
+    usage_str = """
+Usage:
+    $ %(prog)s          # Today.
+    $ %(prog)s -d 7     # 7 days from today.
+    """
+    parser = ArgumentParser(
+        epilog=usage_str,
+        formatter_class=RawTextHelpFormatter
+    )
+    parser.add_argument("-d", "--days", help="Timedelta of days", default="0")
+    return parser.parse_args()
+
+
+def get_year_week_number(daydelta):
     today = datetime.now()
+    day = today + timedelta(days=int(daydelta))
 
     return {
-        "year": today.strftime("%Y"),
-        "month": today.strftime("%m"),
-        "week": today.isocalendar()[1]
+        "year": day.strftime("%Y"),
+        "month": day.strftime("%m"),
+        "week": day.isocalendar()[1]
     }
 
 
-def get_weekly_dates():
+def get_weekly_dates(daydelta):
 
     # Define week alias name.
     DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"]
 
     today = datetime.now()
+    day = today + timedelta(days=int(daydelta))
 
     # Find the Sunday.
-    start_of_week = today - timedelta(days=today.weekday() + 1)
+    start_of_week = day - timedelta(days=day.weekday() + 1)
 
     # Create one list to store "Formatted date, day name".
     weekly_dates = []
@@ -53,10 +72,11 @@ def view_weekly_todo(weekly_dates, md_content):
 
 
 def main():
+    args = get_args()
 
     # H1.
     #
-    ywn = get_year_week_number()
+    ywn = get_year_week_number(args.days)
     year_num = ywn["year"]
     month_num = ywn["month"]
     week_num = ywn["week"]
@@ -75,7 +95,7 @@ def main():
 
     # Dates block.
     #
-    weekly_dates = get_weekly_dates()
+    weekly_dates = get_weekly_dates(args.days)
     result = view_weekly_todo(weekly_dates, md_content)
     result += "\n"
 
