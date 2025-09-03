@@ -20,7 +20,12 @@ Usage:
         epilog=usage_str,
         formatter_class=RawTextHelpFormatter
     )
-    parser.add_argument("-d", "--days", help="Timedelta of days", default="0")
+    parser.add_argument(
+        "-d", "--days",
+        help="Timedelta of days",
+        type=int,
+        default="0"
+    )
     return parser.parse_args()
 
 
@@ -73,12 +78,7 @@ def view_weekly_todo(weekly_dates, md_content):
 
 def main():
     args = get_args()
-
     daydelta = args.days
-    if daydelta.isdigit():
-        daydelta = int(daydelta)
-    else:
-        print("Please enter number !")
 
     try:
         # H1.
