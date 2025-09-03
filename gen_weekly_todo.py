@@ -26,7 +26,7 @@ Usage:
 
 def get_year_week_number(daydelta):
     today = datetime.now()
-    day = today + timedelta(days=int(daydelta))
+    day = today + timedelta(days=daydelta)
 
     return {
         "year": day.strftime("%Y"),
@@ -41,7 +41,7 @@ def get_weekly_dates(daydelta):
     DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"]
 
     today = datetime.now()
-    day = today + timedelta(days=int(daydelta))
+    day = today + timedelta(days=daydelta)
 
     # Find the Sunday.
     start_of_week = day - timedelta(days=day.weekday() + 1)
@@ -74,36 +74,43 @@ def view_weekly_todo(weekly_dates, md_content):
 def main():
     args = get_args()
 
-    # H1.
-    #
-    ywn = get_year_week_number(args.days)
-    year_num = ywn["year"]
-    month_num = ywn["month"]
-    week_num = ywn["week"]
+    daydelta = args.days
+    if daydelta.isdigit():
+        daydelta = int(daydelta)
+    else:
+        print("Please enter number !")
 
-    md_content = f"# Weekly of {year_num}.{week_num}\n"
+    try:
+        # H1.
+        ywn = get_year_week_number(daydelta)
+        year_num = ywn["year"]
+        month_num = ywn["month"]
+        week_num = ywn["week"]
+        md_content = f"# Weekly of {year_num}.{week_num}\n"
 
-    # Calendar block.
-    #
-    tc = calendar.TextCalendar()
-    cal = tc.formatmonth(int(year_num), int(month_num))
-    md_content += "\n```"
-    md_content += cal
-    md_content += "```"
+        # Calendar block.
+        #
+        tc = calendar.TextCalendar()
+        cal = tc.formatmonth(int(year_num), int(month_num))
+        md_content += "\n```"
+        md_content += cal
+        md_content += "```"
 
-    md_content += "\n----\n"
+        md_content += "\n----\n"
 
-    # Dates block.
-    #
-    weekly_dates = get_weekly_dates(args.days)
-    result = view_weekly_todo(weekly_dates, md_content)
-    result += "\n"
+        # Dates block.
+        #
+        weekly_dates = get_weekly_dates(daydelta)
+        result = view_weekly_todo(weekly_dates, md_content)
+        result += "\n"
+        print(result)
 
-    print(result)
+        # Write result into TODO_FILE.
+        with open(TODO_FILE, "w", encoding="utf-8") as f:
+            f.write(result)
 
-    # Write result into TODO_FILE.
-    with open(TODO_FILE, "w", encoding="utf-8") as f:
-        f.write(result)
+    except Exception as e:
+        print(f"[Error] {e}")
 
 
 if __name__ == "__main__":
