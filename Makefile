@@ -1,10 +1,10 @@
 main: build
 
 check:
-	flake8 gen_weekly_todo.py
+	flake8 *.py
 
 build:
-	python3 gen_weekly_todo.py
+	python3 weekly4note.py
 
 clean:
 	-rm -f todo.md
